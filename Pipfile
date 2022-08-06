@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 matplotlib = "*"
+streamlit = "*"
+pandas = "*"
+streamlit-aggrid = "*"
+bokeh = "*"
 
 [dev-packages]
 
