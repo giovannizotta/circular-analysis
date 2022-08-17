@@ -1,12 +1,9 @@
 import pandas as pd
 import streamlit as st
 
-from model.data import get_data
-
-
 from utils.options import option_rebalance_type, option_destination, option_timeframe
-from utils.data_utils import aggregate_on_ppm, convert_to_million_sats, get_hist, get_relevant_columns, \
-    aggregate_by_source
+from utils.data_utils import groupby_ppm_aggregate_on_amount, convert_to_million_sats, get_hist, get_relevant_columns, \
+    group_by_column_and_aggregate_on_amount_and_weighted_ppm, get_data
 
 
 def data_after_options(succ_df: pd.DataFrame, fail_df: pd.DataFrame) -> pd.DataFrame:
@@ -29,14 +26,13 @@ def main():
     df = data_after_options(succ_df, fail_df)
     df = convert_to_million_sats(df)
 
-    df_aggsource = aggregate_by_source(df.copy())
+    df_aggsource = group_by_column_and_aggregate_on_amount_and_weighted_ppm(df.copy(), 'source_alias', 'Source')
 
-    df = aggregate_on_ppm(df)
+    df = groupby_ppm_aggregate_on_amount(df)
     p = get_hist(df)
     st.bokeh_chart(p, use_container_width=True)
 
-    st.markdown("Hits: " + str(len(df)))
-    st.markdown(f"Total amount rebalanced to this destination: {df['msatoshi'].sum():.2f} million sats")
+    st.markdown(f"Total amount of rebalances towards this destination: {df['msatoshi'].sum():.2f} million sats")
 
     st.dataframe(df_aggsource)
 

@@ -9,8 +9,3 @@ streamlit = "*"
 pandas = "*"
 streamlit-aggrid = "*"
 bokeh = "*"
-
-[dev-packages]
-
-[requires]
-python_version = "3.8"
